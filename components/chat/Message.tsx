@@ -26,8 +26,9 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingHorizontal: 16,
     maxWidth: "80%",
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    marginBottom: 12,
   },
   message: {
     fontSize: 16,
@@ -36,10 +37,10 @@ const styles = StyleSheet.create({
   user: {
     backgroundColor: "#3459fe",
     alignSelf: "flex-end",
-    borderBottomLeftRadius: 8,
+    borderBottomLeftRadius: 12,
   },
   assistant: {
     backgroundColor: "#1f1f1f",
-    borderBottomRightRadius: 8,
+    borderBottomRightRadius: 12,
   },
 });

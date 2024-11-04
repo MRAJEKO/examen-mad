@@ -15,19 +15,22 @@ interface IProps {
 
 export const useChat = ({ api, body }: IProps) => {
   const [messages, setMessages] = useState<IMessage[]>([
-    { role: "assistant", content: "Hello! How can I help you today?" },
+    {
+      role: "assistant",
+      content:
+        "Hallo ik ben Elo! Vertel me hoe jij AI wilt toepassen en ik help je graag met het vinden van de juiste implementatie!",
+    },
   ]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<any | null>(null);
 
-  // Function to fetch data from the API
   const fetchData = async (updatedMessages: IMessage[]) => {
     setIsLoading(true);
     try {
       const response = await fetch(api, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Ensure headers are set
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           messages: updatedMessages,
@@ -39,10 +42,7 @@ export const useChat = ({ api, body }: IProps) => {
 
       if (!response.ok) {
         setError(data.message);
-      }
-
-      // Append the response from the API to messages
-      else setMessages((prevMessages) => [...prevMessages, data]);
+      } else setMessages((prevMessages) => [...prevMessages, data]);
     } catch (error) {
       setError("There was an error fetching the data");
     } finally {
@@ -50,13 +50,11 @@ export const useChat = ({ api, body }: IProps) => {
     }
   };
 
-  // Function to append a new message and trigger data fetching
   const append = (message: IMessage) => {
     if (!message.content) return;
 
     setMessages((prevMessages) => {
       const updatedMessages = [...prevMessages, message];
-      // Call fetchData with the updated messages
       fetchData(updatedMessages);
       setError(null);
       return updatedMessages;
