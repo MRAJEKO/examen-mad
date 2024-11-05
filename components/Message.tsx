@@ -1,5 +1,4 @@
-import { StyleSheet, View } from "react-native";
-import { ThemedText } from "../ThemedText";
+import { StyleSheet, Text, View } from "react-native";
 
 interface IProps {
   content: string;
@@ -14,7 +13,7 @@ const Message = ({ role, content }: IProps) => {
         role === "user" ? styles.user : styles.assistant,
       ]}
     >
-      <ThemedText style={[styles.message]}>{content}</ThemedText>
+      <Text style={[styles.message]}>{content}</Text>
     </View>
   );
 };

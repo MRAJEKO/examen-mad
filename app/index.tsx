@@ -1,9 +1,7 @@
-import Header from "@/components/chat/Header";
-import Input from "@/components/chat/Input";
-import Loading from "@/components/chat/Loading";
-import Message from "@/components/chat/Message";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import Header from "@/components/Header";
+import Input from "@/components/Input";
+import Loading from "@/components/Loading";
+import Message from "@/components/Message";
 import { useChat } from "@/hooks/useChat";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -13,6 +11,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  Text,
 } from "react-native";
 
 export const getChatIdentifier = () => {
@@ -59,7 +58,7 @@ export default function Index() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.wrapper}
       >
-        <ThemedView safe style={styles.container}>
+        <SafeAreaView style={styles.container}>
           <Header />
           <ScrollView
             style={styles.messages}
@@ -75,9 +74,7 @@ export default function Index() {
               />
             ))}
             {isLoading && <Loading />}
-            {error && (
-              <ThemedText style={styles.error}>{`Error: ${error}`}</ThemedText>
-            )}
+            {error && <Text style={styles.error}>{`Error: ${error}`}</Text>}
           </ScrollView>
           <Input
             loading={isLoading}
@@ -86,7 +83,7 @@ export default function Index() {
             placeholder="Geef antwoord..."
             onSubmitEditing={submit}
           />
-        </ThemedView>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     </>
   );
