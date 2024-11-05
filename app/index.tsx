@@ -5,8 +5,9 @@ import Message from "@/components/chat/Message";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useChat } from "@/hooks/useChat";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -31,10 +32,25 @@ export default function Index() {
 
   const [input, setInput] = useState<string>("");
 
+  const scrollViewRef = useRef<ScrollView>(null);
+
   const submit = () => {
     append({ role: "user", content: input });
     setInput("");
   };
+
+  const scrollToBottom = () =>
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardWillShow",
+      scrollToBottom
+    );
+    return () => {
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   return (
     <>
@@ -45,7 +61,12 @@ export default function Index() {
       >
         <ThemedView safe style={styles.container}>
           <Header />
-          <ScrollView style={styles.messages}>
+          <ScrollView
+            style={styles.messages}
+            contentContainerStyle={{ paddingHorizontal: 12, paddingTop: 12 }}
+            ref={scrollViewRef}
+            onContentSizeChange={scrollToBottom}
+          >
             {messages.map((message, index) => (
               <Message
                 key={index}
@@ -59,6 +80,7 @@ export default function Index() {
             )}
           </ScrollView>
           <Input
+            loading={isLoading}
             value={input}
             onChangeText={(text) => setInput(text)}
             placeholder="Geef antwoord..."
@@ -86,7 +108,6 @@ const styles = StyleSheet.create({
   messages: {
     backgroundColor: "#151718",
     flex: 1,
-    padding: 12,
     flexDirection: "column",
   },
   error: {

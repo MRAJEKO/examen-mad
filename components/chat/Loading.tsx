@@ -8,7 +8,7 @@ const Loading = () => {
   const dot3Animation = useDotAnimation(400);
 
   return (
-    <View style={styles.assistantMessage}>
+    <View style={styles.container}>
       <View style={styles.loading}>
         <Animated.View
           style={[styles.dot, { transform: [{ translateY: dot1Animation }] }]}
@@ -27,7 +27,7 @@ const Loading = () => {
 export default Loading;
 
 const styles = StyleSheet.create({
-  assistantMessage: {
+  container: {
     backgroundColor: "#1f1f1f", // Replace with your Colors.$accent-background
     paddingVertical: 12,
     paddingTop: 16,
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     borderRadius: 10,
     borderBottomLeftRadius: 0,
+    marginBottom: 12,
   },
   loading: {
     flexDirection: "row",

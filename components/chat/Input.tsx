@@ -4,15 +4,17 @@ import Icon from "react-native-remix-icon";
 
 interface IProps extends React.ComponentProps<typeof TextInput> {
   onSubmitEditing: () => void;
+  loading?: boolean;
+  value: string;
 }
 
-const Input = ({ onSubmitEditing, ...otherProps }: IProps) => {
+const Input = ({ onSubmitEditing, loading, value, ...otherProps }: IProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
     <View
       style={[
-        { borderColor: isFocused ? "#3459fe" : "transparent" },
+        { borderColor: isFocused ? "#3459fe" : "#1f1f1f" },
         styles.container,
       ]}
     >
@@ -20,11 +22,14 @@ const Input = ({ onSubmitEditing, ...otherProps }: IProps) => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         style={[styles.input]}
+        onSubmitEditing={() => !loading && onSubmitEditing()}
+        value={value}
         {...otherProps}
       />
       <Pressable
-        style={[{ opacity: isFocused ? 1 : 0 }, styles.icon]}
+        style={[{ opacity: value ? (loading ? 0.5 : 1) : 0 }, styles.icon]}
         onPress={onSubmitEditing}
+        disabled={loading}
       >
         <Icon name="send-plane-2-fill" size="20" color="white" />
       </Pressable>
