@@ -14,19 +14,9 @@ import {
   Text,
 } from "react-native";
 
-export const getChatIdentifier = () => {
-  return (
-    Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15)
-  );
-};
-
 export default function Index() {
-  const { messages, isLoading, error, append } = useChat({
+  const { messages, isLoading, error, append, newChat } = useChat({
     api: "https://eloquent-website-git-disable-streaming-option-savvycodes.vercel.app/api/chat?domain-identifier=1WgXZrJgsUOnUi8w&streaming=false",
-    body: {
-      chatIdentifier: getChatIdentifier(),
-    },
   });
 
   const [input, setInput] = useState<string>("");
@@ -59,7 +49,7 @@ export default function Index() {
         style={styles.wrapper}
       >
         <SafeAreaView style={styles.container}>
-          <Header />
+          <Header newChat={newChat} />
           <ScrollView
             style={styles.messages}
             contentContainerStyle={{ paddingHorizontal: 12, paddingTop: 12 }}

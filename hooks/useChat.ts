@@ -8,17 +8,31 @@ interface IMessage {
 
 interface IProps {
   api: string;
-  body: {
-    chatIdentifier: string;
-  };
 }
 
-export const useChat = ({ api, body }: IProps) => {
+const startMessage: IMessage = {
+  role: "assistant",
+  content:
+    "Hallo ik ben Elo! Vertel me hoe jij AI wilt toepassen en ik help je graag met het vinden van de juiste implementatie!",
+};
+
+export const getChatIdentifier = () => {
+  return (
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
+  );
+};
+
+export const useChat = ({ api }: IProps) => {
+  const [chatIdentifier, setChatIdentifier] = useState<string>(
+    getChatIdentifier()
+  );
+
   const [messages, setMessages] = useState<IMessage[]>([
+    startMessage,
     {
       role: "assistant",
-      content:
-        "Hallo ik ben Elo! Vertel me hoe jij AI wilt toepassen en ik help je graag met het vinden van de juiste implementatie!",
+      content: "Wat is je naam?",
     },
   ]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,7 +48,7 @@ export const useChat = ({ api, body }: IProps) => {
         },
         body: JSON.stringify({
           messages: updatedMessages,
-          ...body,
+          chatIdentifier,
         }),
       });
 
@@ -61,5 +75,10 @@ export const useChat = ({ api, body }: IProps) => {
     });
   };
 
-  return { messages, isLoading, append, error };
+  const newChat = () => {
+    setMessages([startMessage]);
+    setChatIdentifier(getChatIdentifier());
+  };
+
+  return { messages, isLoading, append, error, newChat };
 };
