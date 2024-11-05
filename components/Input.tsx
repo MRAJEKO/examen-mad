@@ -3,32 +3,47 @@ import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import Icon from "react-native-remix-icon";
 
 interface IProps extends React.ComponentProps<typeof TextInput> {
-  onSubmitEditing: () => void;
+  onSubmit: (text: string) => void;
   loading?: boolean;
   value: string;
+  color?: string;
 }
 
-const Input = ({ onSubmitEditing, loading, value, ...otherProps }: IProps) => {
+const Input = ({
+  onSubmit,
+  loading,
+  value,
+  style,
+  color,
+  ...otherProps
+}: IProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
     <View
       style={[
-        { borderColor: isFocused ? "#3459fe" : "#1f1f1f" },
+        { borderColor: isFocused ? color || "#3459fe" : "#1f1f1f" },
         styles.container,
+        style,
       ]}
     >
       <TextInput
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         style={[styles.input]}
-        onSubmitEditing={() => !loading && onSubmitEditing()}
+        onSubmitEditing={() => !loading && onSubmit(value)}
         value={value}
         {...otherProps}
       />
       <Pressable
-        style={[{ opacity: value ? (loading ? 0.5 : 1) : 0 }, styles.icon]}
-        onPress={onSubmitEditing}
+        style={[
+          {
+            opacity: value ? (loading ? 0.5 : 1) : 0,
+            backgroundColor: color || "#3459fe",
+          },
+          styles.icon,
+        ]}
+        onPress={() => onSubmit(value)}
         disabled={loading}
       >
         <Icon name="send-plane-2-fill" size="20" color="white" />
@@ -42,8 +57,6 @@ export default Input;
 const styles = StyleSheet.create({
   container: {
     borderRadius: 9999,
-    padding: 4,
-    margin: 8,
     borderWidth: 1,
     gap: 4,
     flexDirection: "row",
@@ -55,8 +68,8 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   icon: {
+    margin: 4,
     padding: 8,
-    backgroundColor: "#3459fe",
     borderRadius: 9999,
   },
 });

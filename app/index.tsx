@@ -1,7 +1,9 @@
+import BadResponse from "@/components/BadResponse";
 import Header from "@/components/Header";
 import Input from "@/components/Input";
 import Loading from "@/components/Loading";
 import Message from "@/components/Message";
+import { API_URL } from "@/contants/url";
 import { useChat } from "@/hooks/useChat";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -15,9 +17,11 @@ import {
 } from "react-native";
 
 export default function Index() {
-  const { messages, isLoading, error, append, newChat } = useChat({
-    api: "https://eloquent-website-git-disable-streaming-option-savvycodes.vercel.app/api/chat?domain-identifier=1WgXZrJgsUOnUi8w&streaming=false",
-  });
+  const { messages, isLoading, error, append, newChat, submitBadResponse } =
+    useChat({
+      api: API_URL,
+      // api: "http://localhost:3000/api/chat?domain-identifier=mad&streaming=false",
+    });
 
   const [input, setInput] = useState<string>("");
 
@@ -63,15 +67,20 @@ export default function Index() {
                 content={message.content}
               />
             ))}
+            <BadResponse
+              messages={messages}
+              submitBadResponse={submitBadResponse}
+            />
             {isLoading && <Loading />}
             {error && <Text style={styles.error}>{`Error: ${error}`}</Text>}
           </ScrollView>
           <Input
+            style={{ margin: 8 }}
             loading={isLoading}
             value={input}
             onChangeText={(text) => setInput(text)}
             placeholder="Geef antwoord..."
-            onSubmitEditing={submit}
+            onSubmit={submit}
           />
         </SafeAreaView>
       </KeyboardAvoidingView>

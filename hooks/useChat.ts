@@ -1,6 +1,7 @@
+import { REVIEW_URL } from "@/contants/url";
 import { useState } from "react";
 
-interface IMessage {
+export interface IMessage {
   id?: string;
   role: string;
   content: string;
@@ -28,13 +29,7 @@ export const useChat = ({ api }: IProps) => {
     getChatIdentifier()
   );
 
-  const [messages, setMessages] = useState<IMessage[]>([
-    startMessage,
-    {
-      role: "assistant",
-      content: "Wat is je naam?",
-    },
-  ]);
+  const [messages, setMessages] = useState<IMessage[]>([startMessage]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<any | null>(null);
 
@@ -80,5 +75,25 @@ export const useChat = ({ api }: IProps) => {
     setChatIdentifier(getChatIdentifier());
   };
 
-  return { messages, isLoading, append, error, newChat };
+  const submitBadResponse = async (message?: string) => {
+    console.log("bad response", message);
+
+    try {
+      await fetch(REVIEW_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "BAD",
+          message: message,
+          chatIdentifier,
+        }),
+      });
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+    }
+  };
+
+  return { messages, isLoading, append, error, newChat, submitBadResponse };
 };
