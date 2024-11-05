@@ -76,8 +76,6 @@ export const useChat = ({ api }: IProps) => {
   };
 
   const submitBadResponse = async (message?: string) => {
-    console.log("bad response", message);
-
     try {
       await fetch(REVIEW_URL, {
         method: "POST",
